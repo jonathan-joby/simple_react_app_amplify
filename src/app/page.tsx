@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Define the type for a property
 interface Property {
   zpid: number;
   street_address: string;
@@ -28,9 +29,10 @@ const Page = () => {
   const [propertyDetail, setPropertyDetail] = useState(null);
   const [zpid, setZpid] = useState('');
 
+  // The base URL of the API is set through an environment variable
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  // Fetch properties summary from Lambda
+  // Fetch properties summary from Lambda API
   const fetchPropertiesSummary = async () => {
     try {
       const response = await axios.get(`${apiUrl}/properties/summary`);
@@ -40,17 +42,17 @@ const Page = () => {
     }
   };
 
-  // Fetch list of properties from Lambda
-const fetchProperties = async () => {
-  try {
-    const response = await axios.get(`${apiUrl}/properties`);
-    setProperties(response.data); // Now, TypeScript knows the shape of the data
-  } catch (error) {
-    console.error("Error fetching properties:", error);
-  }
-};
+  // Fetch all properties from Lambda API
+  const fetchProperties = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/properties`);
+      setProperties(response.data); // Update properties with the fetched data
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    }
+  };
 
-  // Fetch property details based on ZPID
+  // Fetch property details based on the ZPID from the Lambda API
   const fetchPropertyDetail = async () => {
     if (!zpid) return;
     try {
@@ -61,11 +63,13 @@ const fetchProperties = async () => {
     }
   };
 
+  // Fetch data when the component mounts
   useEffect(() => {
     fetchPropertiesSummary();
     fetchProperties();
   }, []);
 
+  // Fetch property details when ZPID changes
   useEffect(() => {
     fetchPropertyDetail();
   }, [zpid]);
@@ -84,8 +88,8 @@ const fetchProperties = async () => {
       <h2>All Properties</h2>
       <ul>
         {properties.length > 0 ? (
-          properties.map((property, index) => (
-            <li key={index}>{property.address}</li>
+          properties.map((property) => (
+            <li key={property.zpid}>{property.street_address}</li> // Correct field: street_address
           ))
         ) : (
           <p>Loading properties...</p>
