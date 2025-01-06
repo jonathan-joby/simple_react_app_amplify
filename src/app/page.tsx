@@ -3,6 +3,25 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+interface Property {
+  zpid: number;
+  street_address: string;
+  city: string;
+  state: string;
+  zip_code: number;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  square_feet: number;
+  property_type: string;
+  year_built: number;
+  status: string;
+  photos: {
+    url_768: string;
+    url_1536: string;
+  }[];
+}
+
 const Page = () => {
   const [propertiesSummary, setPropertiesSummary] = useState(null);
   const [properties, setProperties] = useState([]);
