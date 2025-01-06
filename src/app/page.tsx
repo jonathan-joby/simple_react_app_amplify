@@ -24,7 +24,7 @@ interface Property {
 
 const Page = () => {
   const [propertiesSummary, setPropertiesSummary] = useState(null);
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [propertyDetail, setPropertyDetail] = useState(null);
   const [zpid, setZpid] = useState('');
 
@@ -41,14 +41,14 @@ const Page = () => {
   };
 
   // Fetch list of properties from Lambda
-  const fetchProperties = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/properties`);
-      setProperties(response.data);
-    } catch (error) {
-      console.error('Error fetching properties:', error);
-    }
-  };
+const fetchProperties = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/properties`);
+    setProperties(response.data); // Now, TypeScript knows the shape of the data
+  } catch (error) {
+    console.error("Error fetching properties:", error);
+  }
+};
 
   // Fetch property details based on ZPID
   const fetchPropertyDetail = async () => {
